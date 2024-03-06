@@ -1,0 +1,24 @@
+/*
+Binary Exponentiation with mod
+
+Note: It's possible to speed this algorithm for large b >> m. If m is a prime number 
+x^n is equivalent to  [x^{n mod (m-1)}] mod{m} for prime 
+m, and 
+x^n is equivalent to [x^{n mod{phi(m)}}] mod{m} for composite 
+m. This follows directly from Fermat's little theorem and Euler's theorem
+
+*/
+
+const ll MOD = (ll) (1e9) + 7|;see if mod is needed or not
+ll binpow(ll a, ll b)
+{
+    a %= MOD;
+    ll res = 1LL;
+    while (b > 0)
+    {
+        if (b & 1) res = (res * a) % MOD;
+        a = (a * a) % MOD;
+        b >>= 1;
+    }
+    re res;
+}
