@@ -1,0 +1,159 @@
+#include<bits/stdc++.h>
+#define fi first
+#define se second
+#define pb push_back
+#define endl '\n'
+
+using ll = long long;
+using namespace std;
+
+ll mod = 998244353;
+
+struct sptable{
+    ll n, k;
+    vector<vector<ll>> mntable, mxtable;
+
+    sptable(ll sz){
+        n = sz;
+        k = log2(sz)+1;
+        mntable = vector<vector<ll>> (k, vector<ll> (n, 1e9));
+        mxtable = vector<vector<ll>> (k, vector<ll> (n, -1));
+    }
+
+    void build(vector<ll> &v1, vector<ll> &v2){
+        for(ll i=0;i<k;i++){
+            for(ll j=0;j<n-(1<<i)+1;j++){
+                if(i==0) {
+                    mntable[i][j] = v2[j];
+                    mxtable[i][j] = v1[j];
+                }
+                else {
+                    mntable[i][j] = min(mntable[i-1][j], mntable[i-1][min(n-1, j+(1<<(i-1)))]);
+                    mxtable[i][j] = max(mxtable[i-1][j], mxtable[i-1][min(n-1, j+(1<<(i-1)))]);
+                }
+            }
+        }
+    }
+
+    ll mnquery(ll l, ll r){
+        ll sz = log2(r-l+1);
+        return min(mntable[sz][l], mntable[sz][r-(1<<sz)+1]);
+    }
+    ll mxquery(ll l, ll r){
+        ll sz = log2(r-l+1);
+        return max(mxtable[sz][l], mxtable[sz][r-(1<<sz)+1]);
+    }
+};
+
+void solve(ll cs){
+    ll j, i, p, q, a, b, c, m, n, k, g, mn = 0, sum, mx = 998244353;
+
+    string s;
+    cin >> n ;
+
+    vector<ll> v1(n), v2(n), pre(n, 1e9), suf(n, -1);
+
+    for(auto &x : v1) cin >> x;
+    for(auto &x : v2) cin >> x;
+
+    |sptable st = sptable(n);
+    st.build(v1, v2);
+
+    vector<pair<ll, ll>> vp;
+
+    for(i=0;i<n;i++) {
+        vp.pb({v2[i], i});
+    }
+
+    sort(vp.begin(), vp.end());
+
+    //cout << st.mxquery(1, 3) << " ";
+    for(auto x : vp){
+        if(x.fi==v1[x.se]) continue;
+        if(x.fi!=v1[x.se] and x.fi<v1[x.se]) {
+            cout << "NO" << endl;
+            return;
+        }
+
+        bool ok = false;
+
+        ll l = 0, r = x.se-1, mid;
+        while(l<=r){
+            mid = (l+r)/2;
+            ll val1 = st.mxquery(mid, x.se);
+            ll val2 = st.mnquery(mid, x.se);
+            if(val1<=x.fi and val2==x.fi){
+                r = mid-1;
+            }
+            else l = mid+1;
+        }
+
+        //cout << l << "L ";
+        if(l<x.se and st.mxquery(l, x.se-1)==x.fi) {
+            ok = 1;
+        }
+        //for(i=x.se-1;i>-1 and v1[i]<=x.fi and v2[i]>=x.fi;i--){
+        //    if(v1[i]==x.fi) ok = 1;
+        //}
+
+        if(ok){
+//            j=x.se;
+//            while(i!=j) v1[j] = x.fi, j--;
+            continue;
+        }
+
+        l = x.se+1, r = n-1, mid;
+        while(l<=r){
+            mid = (l+r)/2;
+            ll val1 = st.mxquery(x.se, mid);
+            ll val2 = st.mnquery(x.se, mid);
+            //cout << mid << " " << val1 << " " << val2 << " ";
+            if(val1<=x.fi and val2==x.fi){
+                l = mid+1;
+            }
+            else r = mid-1;
+        }
+
+        //cout << r << "R ";
+        if(x.se<r and st.mxquery(x.se+1, r)==x.fi) {
+            ok = 1;
+        }
+//        for(i=x.se+1;i<n and v1[i]<=x.fi and v2[i]>=x.fi;i++){
+//            if(v1[i]==x.fi) ok = 1;
+//        }
+
+        if(ok){
+//            j=x.se;
+//            while(i!=j) v1[j] = x.fi, j++;
+            continue;
+        }
+        else{
+            cout << "NO" << endl;
+            return;
+        }
+
+    }
+
+    cout << "YES";
+    cout << endl;
+
+}
+
+int main(){
+    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    //seive(1e6+2);
+    //For getting input from input.txt file
+    //freopen("output3.txt", "r", stdin);
+
+    //Printing the Output to output.txt file
+    //freopen("output6.txt", "w", stdout);
+
+    ll t=1, cs=1;
+    cin >> t;
+    while(t--){
+        //string str;
+        //getline(cin, str);
+        solve(cs++);
+    }
+}
+
