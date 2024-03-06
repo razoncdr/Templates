@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define nl '\n'
+#define yes cout<<"YES"
+#define no cout<<"NO"
+#define fi first
+#define se second
+#define bgn begin()
+#define end end()
+#define one cout<<"1"
+#define mone cout<<"-1"
+#define zero cout<<"0"
+#define fori for(i=0;i<n;i++)
+#define forj for(j=0;j<n;j++)
+#define fork for(k=0;k<n;k++)
+#define forilen for(i=0;i<len;i++)
+#define forim for(i=0;i<m;i++)
+#define forjm for(j=0;j<m;j++)
+#define forkm for(k=0;k<m;k++)
+#define cn cin>>
+#define lmx LLONG_MAX
+#define lmn LLONG_MIN
+#define imx INT_MAX
+#define imn INT_MIN
+#define re return
+#define pb push_back
+#define vl vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+using namespace std;
+//typedef vector<int> vi;
+
+const ll MAXN = 2e5;
+ll bin_log[MAXN + 5];
+
+void solve()
+{
+    ll n=0,q,i=0,j=0,k=0,m=0,x=0;
+    cn n>>q;
+    ll a[n+5];
+    x = (ll) (bin_log[n] + 1);
+    ll sparse[n+5][x];
+    fori
+    {
+        cn a[i];
+        sparse[i][0] = a[i];
+    }
+    for(i=1; i<x; i++)
+    {
+        k = (1<<(i-1));
+        for(j=0;j+k<n;j++)
+        {
+            sparse[j][i] = min(sparse[j][i-1], sparse[j+k][i-1]);
+        }
+    }
+    while(q--)
+    {
+        cn k>>x;
+        m = bin_log[x-k+1];
+        cout<<min(sparse[k-1][m], sparse[x-(1<<m)][m])<<nl;
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t=1;
+    bin_log[1]=0;
+    for(ll i=2;i<=MAXN;i++)
+    {
+        bin_log[i] = bin_log[i/2] + 1;
+    }
+//    cin>>t;
+    while(t--)
+    {
+        solve();
+        cout<<'\n';
+    }
+    return 0;
+}
+
+
+
