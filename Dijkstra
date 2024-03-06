@@ -1,0 +1,149 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define nl '\n'
+#define yes cout<<"YES"
+#define no cout<<"NO"
+#define fi first
+#define se second
+#define bgn begin()
+#define end end()
+#define one cout<<"1"
+#define mone cout<<"-1"
+#define zero cout<<"0"
+#define fori for(i=0;i<n;i++)
+#define fori1 for(i=1;i<=n;i++)
+#define forj for(j=0;j<n;j++)
+#define fork for(k=0;k<n;k++)
+#define forilen for(i=0;i<len;i++)
+#define forim for(i=0;i<m;i++)
+#define forjm for(j=0;j<m;j++)
+#define forkm for(k=0;k<m;k++)
+#define cn cin>>
+#define lmx LLONG_MAX
+#define lmn LLONG_MIN
+#define imx INT_MAX
+#define imn INT_MIN
+#define re return
+#define pb push_back
+#define vl vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+using namespace std;
+//typedef vector<int> vi;
+
+
+const ll MAXN = 1e5;
+vector <pll> adj[MAXN + 5];
+bool vis[MAXN + 5];
+ll par[MAXN + 5], depth[MAXN + 5],n,m;
+vector <ll> dirx= {1,0,-1,0}, diry= {0,-1,0,1};
+
+bool isValid(ll i, ll j)
+{
+    if(i<0 || i>=n || j<0 || j>=m) re false;
+    re true;
+}
+
+void add(ll a, ll b, ll j)
+{
+    adj[a].pb({j, b});
+    adj[b].pb({j, a});
+}
+
+void showpq(
+    priority_queue<pll, vector<pll>, greater<pll> > g)
+{
+    while (!g.empty()) {
+        cout <<g.top().fi<<' '<<g.top().se<<nl;
+        g.pop();
+    }
+    cout << '\n';
+}
+
+void bfs(ll st)
+{
+//    vis[st] = true;
+
+    priority_queue <pll, vector<pll>, greater <pll>> q;
+    q.push({0LL, st});
+    par[st] = 0;
+    depth[st] = 0;
+    while(!q.empty())
+    {
+        auto x = q.top();
+        q.pop();
+        if(vis[x.se]) continue;
+        vis[x.se] = true;
+        for(auto it: adj[x.se])
+        {
+//            if(!vis[it.se])
+//            {
+                ll c = max(depth[x.se] ,it.fi);
+                if(c<depth[it.se])
+                {
+                    par[it.se] = x.se;
+                    depth[it.se] = c;
+//                    q.push(it);
+                    q.push({c, it.se});
+                }
+//            }
+        }
+    }
+}
+
+void solve()
+{
+    ll n=0,i=0,j=0,k=0,m=0,x=0;
+    cn n>>m;
+    for(i=0;i<=n;i++)
+    {
+        adj[i].clear();
+        vis[i] = false;
+        depth[i] = lmx/2;
+    }
+    for(i=0;i<m;i++)
+    {
+        cn k>>x>>j;
+        add(k, x, j);
+    }
+    cn x;
+    bfs(x);
+//    if(depth[n]==lmx/2)
+//    {
+//        cout<<"-1";
+//        re;
+//    }
+    for(i=0;i<n;i++)
+    {
+        if(depth[i]==lmx/2) cout<<"Impossible\n";
+        else cout<<depth[i]<<nl;
+    }
+//    vector <ll> ans;
+//    while(n)
+//    {
+//        ans.pb(n);
+//        n = par[n];
+//    }
+//    for(i=ans.size()-1; i>=0; i--)
+//        cout<<ans[i]<<' ';
+//        cout<<nl<<depth[nn];
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t = 1,cs = 0;
+    cin>>t;
+    while(t--)
+    {
+        cout<<"Case "<<++cs<<":\n";
+        solve();
+//        cout<<'\n';
+    }
+    return 0;
+}
+
+
+
