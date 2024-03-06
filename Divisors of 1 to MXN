@@ -1,0 +1,12 @@
+const ll MXN = 2e5|;
+vector <ll> dv[MXN+5];
+
+void f()
+{
+    ll i, j;
+    for(i=1; i<=MXN; i++)
+    {
+        for(j=i+i; j<=MXN; j+=i) dv[j].pb(i);
+        dv[i].pb(i);
+    }
+}
