@@ -1,0 +1,113 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define int long long
+#define nl '\n'
+#define yes cout<<"YES"
+#define no cout<<"NO"
+#define fi first
+#define se second
+#define bgn begin()
+#define end end()
+#define one cout<<"1"
+#define mone cout<<"-1"
+#define zero cout<<"0"
+#define fori for(i=0;i<n;i++)
+#define fori1 for(i=1;i<=n;i++)
+#define forj for(j=0;j<n;j++)
+#define fork for(k=0;k<n;k++)
+#define forilen for(i=0;i<len;i++)
+#define forim for(i=0;i<m;i++)
+#define forjm for(j=0;j<m;j++)
+#define forkm for(k=0;k<m;k++)
+#define cn cin>>
+#define lmx LLONG_MAX
+#define lmn LLONG_MIN
+#define imx INT_MAX
+#define imn INT_MIN
+#define re return
+#define pb push_back
+#define vl vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+using namespace std;
+//typedef vector<int> vi;
+
+ll ans = 0;
+
+struct node {
+    bool endmark;
+    ll freq = 0;
+    node* next[26 + 1];
+    node()
+    {
+        endmark = false;
+        for (int i = 0; i < 26; i++)
+            next[i] = NULL;
+    }
+} * root;
+void insert(string s)
+{
+    ll len = s.length();
+    node* curr = root;
+    for (int i = 0; i < len; i++) {
+        int id = s[i] - 'a';
+        if(curr->next[id] == NULL)
+        {
+            curr->next[id] = new node();
+        }
+        curr = curr->next[id];
+        curr->freq = (curr->freq) + 1;
+    }
+    curr->endmark = true;
+}
+bool search(string s)
+{
+    ll len = s.length();
+    node* curr = root;
+    for (int i = 0; i < len; i++) {
+        int id = s[i] - 'a';
+        if (curr->next[id] == NULL)
+            return false;
+        curr = curr->next[id];
+        ans -= 2LL * curr->freq;
+    }
+    return curr->endmark;
+}
+void del(node* cur)
+{
+    for (int i = 0; i < 26; i++)
+        if (cur->next[i])
+            del(cur->next[i]);
+
+    delete (cur);
+}
+
+void solve()
+{
+    ll n=0, i=0, j=0, k=0, m=0, x=0;
+    cn n;
+    root = new node();
+    fori
+    {
+        string s;
+        cn s;
+        insert(s);
+    }
+    ans *= n;
+    ans <<= 1LL;
+    del(root);
+}
+
+int32_t main()
+{
+    int t=1, cs=0;
+    while(t--)
+    {
+        solve();
+        cout<<'\n';
+    }
+    return 0;
+}
+
+
+
