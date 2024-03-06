@@ -1,0 +1,23 @@
+
+const ll MAXN = 3|e5;
+vector <ll> adj[MAXN + 5];
+bool vis[MAXN + 5];
+ll par[MAXN + 5], depth[MAXN + 5];
+
+void add(ll a, ll b)
+{
+    adj[a].pb(b);
+    adj[b].pb(a);
+}
+
+void dfs(ll st)
+{
+    vis[st] = true;
+    for(auto it: adj[st])
+    {
+        if(!vis[it])
+        {
+            dfs(it);
+        }
+    }
+}
