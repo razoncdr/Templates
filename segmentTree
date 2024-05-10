@@ -1,0 +1,119 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define int long long
+#define nl '\n'
+#define yes cout<<"YES"
+#define no cout<<"NO"
+#define fi first
+#define se second
+#define bgn begin()
+#define end end()
+#define one cout<<"1"
+#define mone cout<<"-1"
+#define zero cout<<"0"
+#define fori for(i=0;i<n;i++)
+#define fori1 for(i=1;i<=n;i++)
+#define forj for(j=0;j<n;j++)
+#define fork for(k=0;k<n;k++)
+#define forilen for(i=0;i<len;i++)
+#define forim for(i=0;i<m;i++)
+#define forjm for(j=0;j<m;j++)
+#define forkm for(k=0;k<m;k++)
+#define cn cin>>
+#define lmx LLONG_MAX
+#define lmn LLONG_MIN
+#define imx INT_MAX
+#define imn INT_MIN
+#define re return
+#define pb push_back
+#define vl vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+using namespace std;
+//typedef vector<int> vi;
+
+
+template<class T>
+struct segtree {
+    int n;
+    vector<T> tree;
+    segtree(int len) : n(len) {
+        tree.resize(4 * len);
+    }
+    // change combine function
+    T combine(T x, T y) {
+        |
+    }
+    void build(vector<ll> &arr, int at, int l, int r) {
+        if (l == r) return void(tree[at] = arr[l]);
+        int m = (l + r) >> 1;
+        build(arr, at << 1, l, m);
+        build(arr, at << 1 | 1, m + 1, r);
+        tree[at] = combine(tree[at << 1], tree[at << 1 | 1]);
+    }
+    void Build(vector<ll> &arr){ build(arr, 1, 0, n - 1); } // Use this
+
+    void update(int at, int l, int r, int p) {
+        if (l == r) return void(tree[at] ^= 1LL); // change the update type
+        int m = (l + r) >> 1;
+        if (p <= m) update(at << 1, l, m, p);
+        else update(at << 1 | 1, m + 1, r, p);
+        tree[at] = combine(tree[at << 1], tree[at << 1 | 1]);
+    }
+    void Update(int p) { update(1, 0, n - 1, p); } // Use this
+
+    T query(int at, int l, int r, int L, int R) {
+        if (L <= l && r <= R) return tree[at];
+        int m = (l + r) >> 1;
+        if (R <= m) return query(at << 1, l, m, L, R);
+        if (m < L) return query(at << 1 | 1, m + 1, r, L, R);
+        return combine(query(at << 1, l, m, L, R), query(at << 1 | 1, m + 1, r, L, R));
+    }
+    T Query(int l, int r) { return query(1, 0, n - 1, l, r); } // Use this
+};
+
+void solve()
+{
+    ll n=0, i=0, j=0, k=0, m=0, x=0, ans=0;
+    cn n>>k;
+    vector <ll> a(n);
+    fori
+    {
+        cn a[i];
+    }
+    segtree <ll> st(n);
+    st.Build(a);
+    while(k--)
+    {
+        ll type;
+        cn type>>x;
+        if(type == 1)
+        {
+            st.Update(x);
+        }else
+        {
+            ll lo = 0, hi = n-1, mid;
+            while(lo<=hi)
+            {
+                mid = (lo+hi)/2LL;
+                if(st.Query(0, mid)>x)
+                {
+                    hi = mid - 1;
+                    ans = mid;
+                }else lo = mid + 1;
+            }
+            cout<<ans<<nl;
+        }
+    }
+}
+
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    solve();
+}
+
+
+
