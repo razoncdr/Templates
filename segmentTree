@@ -42,7 +42,7 @@ struct segtree {
     }
     // change combine function
     T combine(T x, T y) {
-        |
+
     }
     void build(vector<ll> &arr, int at, int l, int r) {
         if (l == r) return void(tree[at] = arr[l]);
@@ -53,14 +53,14 @@ struct segtree {
     }
     void Build(vector<ll> &arr){ build(arr, 1, 0, n - 1); } // Use this
 
-    void update(int at, int l, int r, int p) {
-        if (l == r) return void(tree[at] ^= 1LL); // change the update type
+    void update(int at, int l, int r, int p, int val) {
+        if (l == r) return void(tree[at] = val); // change the update type
         int m = (l + r) >> 1;
-        if (p <= m) update(at << 1, l, m, p);
-        else update(at << 1 | 1, m + 1, r, p);
+        if (p <= m) update(at << 1, l, m, p, val);
+        else update(at << 1 | 1, m + 1, r, p, val);
         tree[at] = combine(tree[at << 1], tree[at << 1 | 1]);
     }
-    void Update(int p) { update(1, 0, n - 1, p); } // Use this
+    void Update(int p, int val) { update(1, 0, n - 1, p, val); } // Use this
 
     T query(int at, int l, int r, int L, int R) {
         if (L <= l && r <= R) return tree[at];
@@ -89,20 +89,10 @@ void solve()
         cn type>>x;
         if(type == 1)
         {
-            st.Update(x);
+            
         }else
         {
-            ll lo = 0, hi = n-1, mid;
-            while(lo<=hi)
-            {
-                mid = (lo+hi)/2LL;
-                if(st.Query(0, mid)>x)
-                {
-                    hi = mid - 1;
-                    ans = mid;
-                }else lo = mid + 1;
-            }
-            cout<<ans<<nl;
+            
         }
     }
 }
