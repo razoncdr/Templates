@@ -1,0 +1,227 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define int long long
+#define nl '\n'
+#define yes cout<<"YES"
+#define no cout<<"NO"
+#define fi first
+#define se second
+#define bgn begin()
+#define end end()
+#define one cout<<"1"
+#define mone cout<<"-1"
+#define zero cout<<"0"
+#define fori for(i=0;i<n;i++)
+#define fori1 for(i=1;i<=n;i++)
+#define forj for(j=0;j<n;j++)
+#define fork for(k=0;k<n;k++)
+#define forilen for(i=0;i<len;i++)
+#define forim for(i=0;i<m;i++)
+#define forjm for(j=0;j<m;j++)
+#define forkm for(k=0;k<m;k++)
+#define cn cin>>
+#define lmx LLONG_MAX
+#define lmn LLONG_MIN
+#define imx INT_MAX
+#define imn INT_MIN
+#define re return
+#define pb push_back
+#define vl vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+using namespace std;
+//typedef vector<int> vi;
+
+
+const ll MAXN = 3e5;
+vector <ll> adj[MAXN + 5];
+bool vis[MAXN + 5];
+ll par[MAXN + 5], dist[MAXN + 5], tin[MAXN + 5], tout[MAXN + 5], t;
+vector <ll> et;
+map <pll, ll> mp;
+
+void add(ll a, ll b, ll wt)
+{
+    adj[a].pb(b);
+    adj[b].pb(a);
+    mp[ {a, b}] = wt;
+    mp[ {b, a}] = wt;
+}
+
+void dfs(ll st)
+{
+    vis[st] = true;
+    tin[st] = et.size();
+    tout[st] = et.size();
+    et.pb(st);
+    for(auto it: adj[st])
+    {
+        if(!vis[it])
+        {
+            dist[it] = dist[st] + mp[ {it, st}];
+            dfs(it);
+            tout[st] = et.size();
+            et.pb(st);
+        }
+    }
+}
+
+
+struct node
+{
+    ll l, r, m, tree, lazy, lca;
+    node *left, *right;
+
+    node(ll s, ll e)
+    {
+        l = s, r = e, m = (l+r)/2, tree = 0, lazy = 0, lca = 0;
+        left = right = NULL;
+    }
+
+    ll combine(ll a, ll b)
+    {
+        if(a==-1) re b;
+        if(b==-1) re a;
+        re (tin[a]<tin[b])?a:b;
+    }
+
+    void push(ll val)
+    {
+        tree += val;
+        lazy += val;
+    }
+
+    void prop()
+    {
+        if(l==r) re;
+        if(left == NULL) left = new node(l, m);
+        if(right == NULL) right = new node(m+1, r);
+        if(lazy == 0) re;
+        left->push(lazy);
+        right->push(lazy);
+        lazy = 0;
+    }
+
+    void build(vector <ll> &v)
+    {
+        prop();
+        if(l==r)
+        {
+            lca = v[l];
+            tree = dist[v[l]];
+            re;
+        }
+        left->build(v);
+        right->build(v);
+        lca = combine(left->lca, right->lca);
+    }
+
+
+    void update(ll b, ll e, ll val)
+    {
+        prop();
+        if(b<=l && r<=e)
+        {
+            push(val);
+            re ;
+        }
+        if(e<l | b>r) re ;
+        left->update(b, e, val);
+        right->update(b, e, val);
+        lca = combine(left->lca, right->lca);
+    }
+
+    ll query(ll b, ll e)
+    {
+        prop();
+        if(b<=l && r<=e) re lca;
+        if(e<l || b>r) re -1;
+        re combine(left->query(b, e), right->query(b, e));
+    }
+
+    ll dquery(ll b, ll e)
+    {
+        prop();
+        if(b<=l && r<=e) re tree;
+        if(e<l || b>r) re 0;
+        re left->dquery(b, e) + right->dquery(b, e);
+    }
+};
+
+
+void solve()
+{
+    ll n=0, q, i=0, j=0, k=0, m=0, x=0, ans=0;
+    cn n;
+    vector <pll> edges;
+    for(i=1; i<n; i++)
+    {
+        cn k>>x>>m;
+        edges.pb({k, x});
+        add(k, x, m);
+    }
+
+    dfs(x);
+//    for(auto it: et) cout<<it<<' ';
+
+    node st = node(0, et.size() - 1);
+    st.build(et);
+
+    cn q;
+    while(q--)
+    {
+        ll type;
+        cn type;
+        if(type==2)
+        {
+            ll l, r;
+            cn l>>r;
+
+            ll ans = st.dquery(tin[l], tin[l]) + st.dquery(tin[r], tin[r]);
+            if(tin[l]>tin[r]) swap(l, r);
+            ll lca = st.query(tin[l], tin[r]);
+            ans -= 2 * st.dquery(tin[lca], tin[lca]);
+            cout<< ans <<nl;
+        }
+        else
+        {
+            ll e, wt;
+            cn e>>wt;
+            e--;
+            pll p = edges[e];
+            ll dif = wt - mp[p];
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            mp[p] += dif;////////////
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            if(tin[p.fi]<tin[p.se]) swap(p.fi, p.se);
+            st.update(tin[p.fi], tout[p.fi], dif);
+        }
+    }
+}
+
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    solve();
+}
+
+
+//abc 294G 
