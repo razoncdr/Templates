@@ -38,6 +38,9 @@ void pre() |call pre() in main function
 
     // Derangement: how j numbers can be arrange in i positions such
     //              that no one is in it's position (index != value)
+    //           d(x, y) = (x-1)*(d(x-1, y-1) + d(x-2, y-2)) + (y-x) *(d(x-1, y-1);
+    //           d(x, x) = (x-1) * (d(x-1, x - 1) + d(x-2, x-2))
+    //           d(x) = (x-1) * (d(x-1) + d(x-2))
     for(i=0;i<=1000;i++)
     {
         d[0][i] = 1;
