@@ -1,0 +1,62 @@
+// Combinatorics: factorial, modular multiplicative inverse, ncr, derangement
+const ll mxN = 1e6, MOD = 1e9+7;
+
+ll fact[mxN+5], inv[mxN + 5], d[1003][1003];
+
+ll binpow(ll a, ll b)
+{
+    a %= MOD;
+    ll res = 1LL;
+    while (b > 0)
+    {
+        if (b & 1) res = (res * a) % MOD;
+        a = (a * a) % MOD;
+        b >>= 1;
+    }
+    re res;
+}
+
+void pre()
+{
+    ll i, j, ans = 1;
+    // factorial with modulo
+    fact[0] = 1;
+    for(i=1;i<=mxN;i++)
+    {
+        fact[i] = fact[i-1] * i;
+        fact[i] %= MOD;
+    }
+
+    // Modular Multiplicative inverse
+    inv[mxN] = binpow(fact[mxN], MOD - 2);
+    for(i=mxN-1;i>=0;i--)
+    {
+        inv[i] = inv[i+1] * (i+1);
+        inv[i] %= MOD;
+    }
+
+    // Derangement: how j numbers can be arrange in i positions such
+    //              that no one is in it's position (index != value)
+    for(i=0;i<=1000;i++)
+    {
+        d[0][i] = 1;
+        d[1][i] = i - 1;
+        d[2][i] = (i - 1) + (i - 2) * (i - 2);
+        d[i][0] = 1;
+    }
+    for(i=3;i<=1000;i++)
+    {
+        for(j=1;j<=1000;j++)
+        {
+            d[i][j] = (i - 1)*d[i-2][j-2] + (j-1)*(d[i-1][j-1]);
+            d[i][j] %= MOD;
+        }
+    }
+}
+
+ll ncr(ll n, ll r)
+{
+    if(r>n) re 0;
+    if(n==r | r==0) re 1;
+    re ((fact[n] * ((inv[r]*inv[n-r])%MOD))%MOD);
+}
