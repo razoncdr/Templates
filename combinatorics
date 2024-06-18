@@ -68,9 +68,3 @@ ll catalan(ll n)
     ans %= MOD;
     re ans;
 }
-void solve()
-{
-    ll n=0, q=0, i=0, j=0, k=0, m=0, x=0, ans=0;
-    cn n;
-    cout<<(catalan(n+1)*(n+2) - 1 + MOD)%MOD;
-}
