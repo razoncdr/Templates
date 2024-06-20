@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 #define ll long long
-//#define int long long
+#define int long long
 #define nl '\n'
 #define yes cout<<"YES"
 #define no cout<<"NO"
@@ -32,7 +32,6 @@
 using namespace std;
 
 const ll MXN = 1e6;
-vector <ll> dv[MXN+5];
 ll a[MXN+5], mul[MXN + 5], f[MXN + 5], g[MXN + 5], mp[MXN + 5];
 
 void solve()
@@ -81,3 +80,4 @@ int32_t main()
 
 
 // CSES 2417: Counting Coprime Pairs
+
