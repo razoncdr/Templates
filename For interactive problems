@@ -1,0 +1,5 @@
+Either delete these lines: 
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+Or, put endl after each cout.
