@@ -1,0 +1,55 @@
+struct hash_st{
+    string s;
+    vector<ll>h,inv,hrev;
+    ll md,base,invb;
+    hash_st(string s,ll md,ll base,ll invb){
+        this->md=md;
+        this->s=s;
+        this->base=base;
+        this->invb=invb;
+    }
+    void init(){
+        h.push_back(0);
+        inv.push_back(1);
+        ll pw=1;
+        for(ll i=0;i<s.size();i++){
+            ll z=(h.back()+pw*(s[i]-'0'+1))%md;
+            h.push_back(z);
+            pw=(pw*base)%md;
+            inv.push_back((inv.back()*invb)%md);
+        }
+    }
+    void init_reverse(){
+        string srev=s;
+        reverse(srev.begin(),srev.end());
+        hrev.push_back(0);
+        ll pw=1;
+        for(ll i=0;i<srev.size();i++){
+            ll z=(hrev.back()+pw*(srev[i]-'0'+1))%md;
+            hrev.push_back(z);
+            pw=(pw*base)%md;
+        }
+    }
+    ll get_hash(ll l,ll r){
+        if(l<=r){
+            return (((h[r]-h[l-1]+md)%md)*inv[l-1])%md;
+        }
+        else {
+            l=s.size()-l+1;
+            r=s.size()-r+1;
+            return (((hrev[r]-hrev[l-1]+md)%md)*inv[l-1])%md;
+        }
+    }
+};
+
+// 1 based indexing
+// hash_st h(s,1000000007,71,98591550);
+// h.init();
+// h.init_reverse();
+
+// hash_st h2(s,1000000033,73,767123313);
+// h2.init();
+// h2.init_reverse();
+
+// ll hs = h.get_hash(1, n), hsr = h.get_hash(n, 1); // hsr means reverse hash
+// ll hss = h2.get_hash(1, n), hssr = h2.get_hash(n, 1);
