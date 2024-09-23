@@ -1,0 +1,115 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define int long long
+#define nl '\n'
+#define fori for(i=0;i<n;i++)
+#define fori1 for(i=1;i<=n;i++)
+#define cn cin>>
+#define lmx LLONG_MAX
+#define re return
+#define pb push_back
+#define vl vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+using namespace std;
+
+const ll mxN = 3e5;  // Maximum number of nodes
+vector<ll> adj[mxN + 5];  // Adjacency list
+bool vis[mxN + 5];  // Visited array for BFS
+ll dist[mxN + 5];   // Distance array for Dijkstra
+map<pll, ll> wt;    // Weight map for edges (used in Dijkstra)
+
+// BFS Implementation
+void bfs(ll st)
+{
+    queue<ll> q;
+    q.push(st);
+    vis[st] = true;
+
+    while (!q.empty()) {
+        ll t = q.front();
+        q.pop();
+        for (auto it : adj[t]) {
+            if (!vis[it]) {
+                q.push(it);
+                vis[it] = true;
+            }
+        }
+    }
+}
+
+// Dijkstra's Algorithm for finding shortest path
+void dijkstra(ll st, ll n)
+{
+    // Min-heap priority queue (distance, node)
+    priority_queue<pll, vector<pll>, greater<pll>> pq;
+    pq.push({0, st});
+    dist[st] = 0;
+
+    while (!pq.empty()) {
+        auto [currDist, node] = pq.top();
+        pq.pop();
+
+        // If this distance is not the shortest, skip
+        if (currDist > dist[node]) continue;
+
+        // Explore neighbors
+        for (auto child : adj[node]) {
+            ll edgeWeight = wt[{node, child}];
+            if (dist[node] + edgeWeight < dist[child]) {
+                dist[child] = dist[node] + edgeWeight;
+                pq.push({dist[child], child});
+            }
+        }
+    }
+}
+
+void solve()
+{
+    ll n, m;
+    cn n >> m;
+
+    // Clear previous test case data
+    for (ll i = 1; i <= n; i++) {
+        adj[i].clear();
+        vis[i] = false;
+        dist[i] = lmx;  // Initialize distances to infinity
+    }
+    wt.clear();  // Clear edge weights
+
+    // Read graph input
+    for (ll i = 1; i <= m; i++) {
+        ll k, x, w;
+        cn k >> x >> w;
+        adj[k].pb(x);
+        adj[x].pb(k);
+        wt[{k, x}] = w;
+        wt[{x, k}] = w;
+    }
+
+    // Run BFS starting from node 1
+    bfs(1);
+
+    // Run Dijkstra from node 1
+    dijkstra(1, n);
+
+    // Output shortest distances from node 1 to all other nodes
+    for (ll i = 2; i <= n; i++) {
+        cout << dist[i] << ' ';
+    }
+    cout << nl;
+}
+
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t;
+    cn t;
+    while (t--) {
+        solve();
+    }
+
+    return 0;
+}
