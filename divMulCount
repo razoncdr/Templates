@@ -1,0 +1,9 @@
+// similar to seive algorithm 
+    for (i = 1; i <= n; ++i)
+    {
+        for (j = i; j <= n; j += i)
+        {
+            div[j] += v1[i]; // divisor count
+            mul[i] += v1[j]; // multiple count
+        }
+    }
