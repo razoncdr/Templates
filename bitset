@@ -31,6 +31,8 @@ void solve()
     c>>=2;
     c &= 6;
     c |= 10;
+    c ^= 5;
+    c = ~c;
     bitset<5> d(12);
     c |= d;
     cout<<c.to_string()<<" is c in string\n";
@@ -38,6 +40,10 @@ void solve()
 
     for(int i=c._Find_first();i<c.size();i=c._Find_next(i)) cout<<i<<' ';
     cout<<" are set bits in c\n";
+
+    if(c.all()) cout<<"all are set in c\n";
+    if(c.any()) cout<<"c has atleast one set bit\n";
+
 
 }
 
