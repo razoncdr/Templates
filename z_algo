@@ -1,0 +1,13 @@
+vector <ll> zf(string s)
+{
+    ll n = s.size();
+    vector <ll> z(n);
+    ll L=0, R =0;
+    for(ll  i=1; i<n; i++)
+    {
+        if(i<R) z[i] = min(R-i,  z[i-L]);
+        while(i+z[i]<n && s[z[i]] == s[i+z[i]]) z[i]++;
+        if(i+z[i]>R) L = i, R = i+z[i];
+    }
+    return z;
+}
