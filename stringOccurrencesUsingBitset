@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define nl '\n'
+#define fi first
+#define se second
+#define lmx LLONG_MAX
+#define lmn LLONG_MIN
+#define imx INT_MAX
+#define imn INT_MIN
+#define re return
+using namespace std;
+
+const ll mxN = 1e5+5;
+bitset<mxN> bs[26];
+
+void solve()
+{
+    ll n=0, q=0, i=0, j=0, k=0, m=0, x=0, ans=0;
+    string s, t;
+    cin >> s >> q;
+    for(i=0;i<s.size();i++)
+    {
+        bs[s[i]-'a'][i] = 1;
+    }
+    while(q--)
+    {
+        cin >> t;
+        bitset <mxN> cur;
+        cur.set();
+        for(i=0;i<t.size();i++)
+        {
+            cur &= (bs[t[i]-'a']>>i);
+        }
+        vector <ll> occ;
+        for(int j = cur._Find_first(); j < mxN; j = cur._Find_next(j)) occ.push_back(j);
+        cout<<"Occurrences of string "<<t<<": ";
+        for(auto it: occ) cout<<it<<' ';
+        cout<<'\n';
+    }
+}
+
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    solve();
+}
